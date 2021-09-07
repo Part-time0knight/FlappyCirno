@@ -1,34 +1,84 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class TubesController : MonoBehaviour
+public class TubesController : MonoBehaviour, IItemSpawner
 {
-    [SerializeField] private float lifeTime = 4;
-    [SerializeField] private float spawnDelay = 1;
-    [SerializeField] private Vector2 spawnPosittion = new Vector2(5f, 0.5f);
-
+    private float lifeTime;
+    private float spawnDelay;
+    private Vector2 spawnPosittion;
+    private int poolSizeTube;
+    private float randomRange;
+    private Settings settings;
+    private float speed;
+    private GameObject tube;
     private IPool pool;
-    private void Awake()
+    private int poolIndex;
+    private readonly List<Rigidbody2D> pipes = new List<Rigidbody2D>();
+    private bool _pause = false;
+    public bool pause
     {
-        pool = GetComponent<IPool>();
+        get { return _pause; }
+        set
+        {
+            _pause = value;
+            Vector2 newVelocity = Vector2.zero;
+            if (!value)
+            {
+                newVelocity.x = -speed;
+            }
+            for (int i = 0; i < pipes.Count; i++)
+            {
+                pipes[i].velocity = newVelocity;
+            }
+        }
     }
-    void Start()
+    [Inject]
+    private void Construct(IPool pool, Settings settings)
     {
-        StartCoroutine(Spawner());
+        this.pool = pool;
+        this.settings = settings;
+        lifeTime = settings.tubeLifeTime;
+        spawnDelay = settings.tubeSpawnDelay;
+        spawnPosittion = settings.tubeSpawnPosition;
+        poolSizeTube = settings.tubePoolSize;
+        randomRange = settings.tubeJumpRange;
     }
     private IEnumerator Spawner()
     {
-        yield return new WaitForSeconds(spawnDelay);
+        float localTime = spawnDelay;
+        while (localTime > 0f)
+        {
+            yield return new WaitForEndOfFrame();
+            if (!pause)
+                localTime -= Time.deltaTime;
+        }
         StartCoroutine(SpawnTube());
         StartCoroutine(Spawner());
     }
     private IEnumerator SpawnTube()
     {
-        GameObject item = pool.item;
-        item.transform.position = spawnPosittion;
+        GameObject item = pool.GetItem(poolIndex);
+        Rigidbody2D itemBody = item.GetComponent<Rigidbody2D>();
+        pipes.Add(itemBody);
         item.SetActive(true);
-        yield return new WaitForSeconds(lifeTime);
-        pool.item = item;
+        itemBody.position = spawnPosittion + new Vector2 (0, Random.Range(-randomRange, randomRange));
+        itemBody.velocity = new Vector2(-speed, 0f);
+        float localTime = lifeTime;
+        while (localTime > 0f)
+        {
+            yield return new WaitForFixedUpdate();
+            if (!pause)
+                localTime -= Time.fixedDeltaTime;
+        }
+        pool.ReturnItem(item, poolIndex);
+    }
+    public void StartSpawn(GameObject item, float speed)
+    {
+        this.speed = speed;
+        tube = item;
+        poolIndex = pool.NewItemPool(tube, poolSizeTube);
+        StartCoroutine(Spawner());
     }
 }

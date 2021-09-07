@@ -146,8 +146,8 @@ GameObject:
   - component: {fileID: 3858493735222364443}
   - component: {fileID: 3858493735222364421}
   - component: {fileID: 3858493735222364440}
+  - component: {fileID: 2910896834842325714}
   - component: {fileID: 3858493735222364420}
-  - component: {fileID: 1962622321839998104}
   - component: {fileID: 2068662472074482417}
   - component: {fileID: 4260292540321406116}
   m_Layer: 0
@@ -192,7 +192,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 5
+  m_Constraints: 4
 --- !u!70 &3858493735222364440
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -202,13 +202,25 @@ CapsuleCollider2D:
   m_GameObject: {fileID: 3858493735222364441}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_Material: {fileID: 6200000, guid: 7783af14fd7752042b317b8509a5057b, type: 2}
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.8, y: 1.13}
+  m_Offset: {x: 0.05, y: 0}
+  m_Size: {x: 0.7, y: 1.06}
   m_Direction: 0
+--- !u!114 &2910896834842325714
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3858493735222364441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d8018b8a39b93241938798d3c7ff468, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3858493735222364420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,19 +231,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2f3a1225b6f3344eb60f7d78d37a28d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  force: 27
---- !u!114 &1962622321839998104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3858493735222364441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d8018b8a39b93241938798d3c7ff468, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &2068662472074482417
@@ -259,9 +258,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _components:
+  - {fileID: 2910896834842325714}
   - {fileID: 3858493735222364420}
-  - {fileID: 2068662472074482417}
   _identifier: 
   _useSceneContext: 0
   _context: {fileID: 0}
-  _bindType: 1
+  _bindType: 2

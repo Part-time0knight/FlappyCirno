@@ -1,17 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Zenject;
 
-public class PlayerCollision : MonoBehaviour, ICollision
+public class PlayerCollision : MonoBehaviour
 {
-    private IController controller;
-    public void Init(IController controller)
+    private IPlayerController player;
+    [Inject] private void Construct(IPlayerController player)
     {
-        this.controller = controller;
+        this.player = player;
     }
-
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        controller.Hit();
+        player.GetPoint();
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        player.Hit();
     }
 }
